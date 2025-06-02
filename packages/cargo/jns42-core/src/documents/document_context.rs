@@ -231,7 +231,7 @@ impl DocumentContext {
   Load nodes from a location. The retrieval location is the physical location of the node,
   it should be a root location
   */
-  pub fn load_from_location(
+  pub async fn load_from_location(
     self: &rc::Rc<Self>,
     retrieval_location: NodeLocation,
     given_location: NodeLocation,
@@ -384,7 +384,7 @@ impl DocumentContext {
     Ok(())
   }
 
-  pub fn load_from_node(
+  pub async fn load_from_node(
     self: &rc::Rc<Self>,
     retrieval_location: NodeLocation,
     given_location: NodeLocation,
@@ -397,12 +397,16 @@ impl DocumentContext {
       .borrow_mut()
       .load_from_node(&retrieval_location, node)?;
 
-    self.load_from_location(
-      retrieval_location,
-      given_location,
-      antecedent_location,
-      default_meta_schema_id,
-    )
+    self
+      .load_from_location(
+        retrieval_location,
+        given_location,
+        antecedent_location,
+        default_meta_schema_id,
+      )
+      .await?;
+
+    Ok(())
   }
 
   pub fn get_explicit_locations(&self) -> BTreeSet<NodeLocation> {
@@ -640,7 +644,7 @@ impl From<exports::jns42::core::documents::DocumentContext> for rc::Rc<DocumentC
 
 #[cfg(target_arch = "wasm32")]
 impl exports::jns42::core::documents::GuestDocumentContext for DocumentContextHost {
-  fn load_from_location(
+  async fn load_from_location(
     &self,
     retrieval_location: String,
     given_location: String,
@@ -653,17 +657,20 @@ impl exports::jns42::core::documents::GuestDocumentContext for DocumentContextHo
       .map(|value| value.try_into())
       .transpose()?;
 
-    self.0.load_from_location(
-      retrieval_location,
-      given_location,
-      antecedent_location,
-      &default_meta_schema_id,
-    )?;
+    self
+      .0
+      .load_from_location(
+        retrieval_location,
+        given_location,
+        antecedent_location,
+        &default_meta_schema_id,
+      )
+      .await?;
 
     Ok(())
   }
 
-  fn load_from_node(
+  async fn load_from_node(
     &self,
     retrieval_location: String,
     given_location: String,
@@ -680,13 +687,16 @@ impl exports::jns42::core::documents::GuestDocumentContext for DocumentContextHo
     let node: crate::utilities::JsonValueHost = node.into_inner();
     let node = node.into();
 
-    self.0.load_from_node(
-      retrieval_location,
-      given_location,
-      antecedent_location,
-      node,
-      &default_meta_schema_id,
-    )?;
+    self
+      .0
+      .load_from_node(
+        retrieval_location,
+        given_location,
+        antecedent_location,
+        node,
+        &default_meta_schema_id,
+      )
+      .await?;
 
     Ok(())
   }
