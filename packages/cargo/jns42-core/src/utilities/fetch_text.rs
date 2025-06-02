@@ -14,8 +14,8 @@ impl From<crate::jns42::core::imports::FetchTextError> for FetchTextError {
 }
 
 #[cfg(target_arch = "wasm32")]
-pub fn fetch_text(location: &str) -> Result<String, FetchTextError> {
-  let text = crate::jns42::core::imports::fetch_text(location)?;
+pub async fn fetch_text(location: &str) -> Result<String, FetchTextError> {
+  let text = crate::jns42::core::imports::fetch_text(location.to_owned()).await?;
 
   Ok(text)
 }
@@ -28,7 +28,7 @@ impl From<std::io::Error> for FetchTextError {
 }
 
 #[cfg(not(target_arch = "wasm32"))]
-pub fn fetch_text(location: &str) -> Result<String, FetchTextError> {
+pub async fn fetch_text(location: &str) -> Result<String, FetchTextError> {
   if location.starts_with("http://") || location.starts_with("https://") {
     Err(FetchTextError::HttpError)
   } else {

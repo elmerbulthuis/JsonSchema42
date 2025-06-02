@@ -9,7 +9,7 @@ async function getCoreModule(path) {
 
 const instance = await instantiate(getCoreModule, {
   "jns42:core/imports": {
-    fetchText(location) {
+    async fetchText(location) {
       const locationLower = location.toLowerCase();
       try {
         if (locationLower.startsWith("http://") || locationLower.startsWith("https://")) {

@@ -277,7 +277,8 @@ impl DocumentContext {
       self
         .cache
         .borrow_mut()
-        .load_from_location(&retrieval_location)?;
+        .load_from_location(&retrieval_location)
+        .await?;
 
       // Get the node from the cache
       let document_node = self

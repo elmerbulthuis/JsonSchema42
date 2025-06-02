@@ -63,7 +63,7 @@ impl NodeCache {
   /// Load nodes from a location. The retrieval location is the physical location of
   /// the node, it should be a root location
   ///
-  pub fn load_from_location(
+  pub async fn load_from_location(
     &mut self,
     retrieval_location: &NodeLocation,
   ) -> Result<(), NodeCacheError> {
@@ -76,7 +76,7 @@ impl NodeCache {
       /*
       retrieve the document
       */
-      let data = fetch_text(&entry.key().to_fetch_string())?;
+      let data = fetch_text(&entry.key().to_fetch_string()).await?;
       let root_node = serde_yaml::from_str(&data)?;
 
       /*
