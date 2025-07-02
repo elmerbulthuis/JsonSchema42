@@ -126,7 +126,7 @@ export function* generateMocksTsCode(specification: models.Specification) {
           (
             [
               ${joinIterable(
-                item.options.map((option) => option.serialize()),
+                item.options.map((option) => JSON.stringify(option)),
                 ", ",
               )}
             ] as const

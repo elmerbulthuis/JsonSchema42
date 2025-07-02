@@ -113,21 +113,21 @@ export type TypeModel = MetadataTypeModel &
     | ReferenceTypeModel
   );
 
-export function toTypeModel(arena: core.SchemaArenaContainer, key: number): TypeModel {
+export function toTypeModel(arena: core.models.SchemaArena, key: number): TypeModel {
   const item = arena.getItem(key);
 
   if (item.types != null) {
     assert(item.types.length <= 1, "unexpected multiple type");
   }
 
-  if (item.ifSchema != null) {
-    assert(item.ifSchema == null, "unexpected if");
+  if (item.if != null) {
+    assert(item.if == null, "unexpected if");
   }
-  if (item.thenSchema != null) {
-    assert(item.thenSchema == null, "unexpected then");
+  if (item.then != null) {
+    assert(item.then == null, "unexpected then");
   }
-  if (item.elseSchema != null) {
-    assert(item.elseSchema == null, "unexpected else");
+  if (item.else != null) {
+    assert(item.else == null, "unexpected else");
   }
   if (item.not != null) {
     assert(item.not == null, "unexpected not");
@@ -145,14 +145,17 @@ export function toTypeModel(arena: core.SchemaArenaContainer, key: number): Type
 
   const { location, title, description, examples, deprecated } = item;
 
-  const type = item.types?.[0] as core.SchemaType;
+  const type = item.types?.[0];
 
   const { reference, propertyNames, mapProperties, arrayItems, contains } = item;
 
   const oneOf = item.oneOf != null ? ([...item.oneOf] as [number, ...number[]]) : undefined;
   const tupleItems = item.tupleItems != null ? [...item.tupleItems] : undefined;
 
-  const { objectProperties, patternProperties, dependentSchemas } = item;
+  const objectProperties = Object.fromEntries(item.objectProperties ?? []);
+  const patternProperties = Object.fromEntries(item.patternProperties ?? []);
+  const dependentSchemas = Object.fromEntries(item.dependentSchemas ?? []);
+
   const { options, required } = item;
 
   const exact = item.exact ?? false;
@@ -179,7 +182,7 @@ export function toTypeModel(arena: core.SchemaArenaContainer, key: number): Type
     assert(oneOf == null, "unexpected oneOf");
 
     switch (type) {
-      case core.SchemaType.Never:
+      case "never":
         return {
           location,
           title,
@@ -192,7 +195,7 @@ export function toTypeModel(arena: core.SchemaArenaContainer, key: number): Type
           type: "never",
         } as MetadataTypeModel & NeverTypeModel;
 
-      case core.SchemaType.Any:
+      case "any":
         return {
           location,
           title,
@@ -205,7 +208,7 @@ export function toTypeModel(arena: core.SchemaArenaContainer, key: number): Type
           type: "any",
         } as MetadataTypeModel & AnyTypeModel;
 
-      case core.SchemaType.Null:
+      case "null":
         return {
           location,
           title,
@@ -218,7 +221,7 @@ export function toTypeModel(arena: core.SchemaArenaContainer, key: number): Type
           type: "null",
         } as MetadataTypeModel & NullTypeModel;
 
-      case core.SchemaType.Boolean:
+      case "boolean":
         return {
           location,
           title,
@@ -232,7 +235,7 @@ export function toTypeModel(arena: core.SchemaArenaContainer, key: number): Type
           options: options?.filter((option) => typeof option === "boolean"),
         } as MetadataTypeModel & BooleanTypeModel;
 
-      case core.SchemaType.Integer:
+      case "integer":
         return {
           location,
           title,
@@ -252,7 +255,7 @@ export function toTypeModel(arena: core.SchemaArenaContainer, key: number): Type
           multipleOf,
         } as MetadataTypeModel & IntegerTypeModel;
 
-      case core.SchemaType.Number:
+      case "number":
         return {
           location,
           title,
@@ -272,7 +275,7 @@ export function toTypeModel(arena: core.SchemaArenaContainer, key: number): Type
           multipleOf,
         } as MetadataTypeModel & NumberTypeModel;
 
-      case core.SchemaType.String:
+      case "str":
         return {
           location,
           title,
@@ -291,7 +294,7 @@ export function toTypeModel(arena: core.SchemaArenaContainer, key: number): Type
           valueFormat,
         } as MetadataTypeModel & StringTypeModel;
 
-      case core.SchemaType.Array:
+      case "array":
         return {
           location,
           title,
@@ -312,7 +315,7 @@ export function toTypeModel(arena: core.SchemaArenaContainer, key: number): Type
           uniqueItems,
         } as MetadataTypeModel & ArrayTypeModel;
 
-      case core.SchemaType.Object:
+      case "object":
         return {
           location,
           title,

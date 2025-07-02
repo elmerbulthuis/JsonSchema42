@@ -2,7 +2,7 @@ import * as core from "@jns42/core";
 import { assert } from "console";
 
 export interface ValidatorModel {
-  readonly types: core.SchemaType[] | undefined;
+  readonly types: core.models.SchemaType[] | undefined;
   readonly reference: number | undefined;
   readonly ifSchema: number | undefined;
   readonly thenSchema: number | undefined;
@@ -37,7 +37,7 @@ export interface ValidatorModel {
   readonly maximumProperties: number | undefined;
 }
 
-export function toValidatorModel(arena: core.SchemaArenaContainer, key: number): ValidatorModel {
+export function toValidatorModel(arena: core.documents.SchemaArena, key: number): ValidatorModel {
   const item = arena.getItem(key);
 
   assert(item.exact === true);
@@ -46,9 +46,9 @@ export function toValidatorModel(arena: core.SchemaArenaContainer, key: number):
 
   const {
     reference,
-    ifSchema,
-    thenSchema,
-    elseSchema,
+    if: ifSchema,
+    then: thenSchema,
+    else: elseSchema,
     not,
     propertyNames,
     mapProperties,
@@ -61,7 +61,10 @@ export function toValidatorModel(arena: core.SchemaArenaContainer, key: number):
   const oneOf = item.oneOf != null ? [...item.oneOf] : undefined;
   const tupleItems = item.tupleItems != null ? [...item.tupleItems] : undefined;
 
-  const { objectProperties, patternProperties, dependentSchemas } = item;
+  const objectProperties = Object.fromEntries(item.objectProperties ?? []);
+  const patternProperties = Object.fromEntries(item.patternProperties ?? []);
+  const dependentSchemas = Object.fromEntries(item.dependentSchemas ?? []);
+
   const { options, required } = item;
 
   const {
