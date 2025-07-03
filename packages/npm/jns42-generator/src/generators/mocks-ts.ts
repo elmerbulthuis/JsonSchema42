@@ -121,7 +121,7 @@ export function* generateMocksTsCode(specification: models.Specification) {
     assert(item != null);
     assert(isMockable(itemKey));
 
-    if ("options" in item && item.options != null) {
+    if ("options" in item && item.options.length > 0) {
       yield itt`
           (
             [

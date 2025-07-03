@@ -232,7 +232,8 @@ export function toTypeModel(arena: core.models.SchemaArena, key: number): TypeMo
           exact,
 
           type: "boolean",
-          options: options?.filter((option) => typeof option === "boolean"),
+          options:
+            options?.map((option) => option.asBoolean()).filter((option) => option != null) ?? [],
         } as MetadataTypeModel & BooleanTypeModel;
 
       case "integer":
@@ -246,7 +247,8 @@ export function toTypeModel(arena: core.models.SchemaArena, key: number): TypeMo
           exact,
 
           type: "integer",
-          options: options?.filter((option) => typeof option === "number"),
+          options:
+            options?.map((option) => option.asNumber()).filter((option) => option != null) ?? [],
 
           minimumInclusive,
           minimumExclusive,
@@ -266,7 +268,8 @@ export function toTypeModel(arena: core.models.SchemaArena, key: number): TypeMo
           exact,
 
           type: "number",
-          options: options?.filter((option) => typeof option === "number"),
+          options:
+            options?.map((option) => option.asNumber()).filter((option) => option != null) ?? [],
 
           minimumInclusive,
           minimumExclusive,
@@ -286,7 +289,8 @@ export function toTypeModel(arena: core.models.SchemaArena, key: number): TypeMo
           exact,
 
           type: "string",
-          options: options?.filter((option) => typeof option === "string"),
+          options:
+            options?.map((option) => option.asString()).filter((option) => option != null) ?? [],
 
           minimumLength,
           maximumLength,
