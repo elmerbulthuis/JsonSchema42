@@ -541,7 +541,6 @@ dependencies = [
  "im",
  "itertools",
  "once_cell",
- "proc-macro2",
  "quote",
  "regex",
  "semver",
