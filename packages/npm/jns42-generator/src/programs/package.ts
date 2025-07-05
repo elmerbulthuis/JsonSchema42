@@ -69,7 +69,7 @@ interface MainConfiguration {
   transformMaximumIterations: number;
 }
 
-function main(configuration: MainConfiguration) {
+async function main(configuration: MainConfiguration) {
   const { instanceSchemaLocation, defaultMetaSchema } = configuration;
   const packageDirectoryPath = path.resolve(configuration.packageDirectory);
   const { packageName, packageVersion, transformMaximumIterations, defaultTypeName } =
@@ -80,7 +80,7 @@ function main(configuration: MainConfiguration) {
 
   const context = contextBuilder.build();
 
-  context.loadFromLocation(
+  await context.loadFromLocation(
     instanceSchemaLocation,
     instanceSchemaLocation,
     undefined,

@@ -188,14 +188,14 @@ interface documents {
   }
 
   resource document-context {
-    load-from-location: func(
+    load-from-location: async func(
       retrieval-location: string,
       given-location: string,
       antecedent-location: option<string>,
       default-meta-schema-id: string,
     ) -> result<string, error>;
 
-    load-from-node: func(
+    load-from-node: async func(
       retrieval-location: string,
       given-location: string,
       antecedent-location: option<string>,

@@ -6,10 +6,11 @@ use clap::Parser;
 use programs::{ProgramOptions, run_program};
 use std::error::Error;
 
-fn main() -> Result<(), Box<dyn Error>> {
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn Error>> {
   let options = ProgramOptions::parse();
 
-  run_program(options)?;
+  run_program(options).await?;
 
   Ok(())
 }
