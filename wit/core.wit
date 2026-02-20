@@ -1,6 +1,5 @@
 package jns42:core;
 
-
 interface imports {
   enum fetch-text-error {
     io-error,
@@ -24,7 +23,7 @@ interface utilities {
 
   resource json-value {
     get-type: func() -> json-type;
-    
+
     as-boolean: func() -> option<bool>;
     as-number: func() -> option<f64>;
     as-string: func() -> option<string>;
@@ -43,7 +42,7 @@ interface naming {
 
   resource names-builder {
     constructor();
-    
+
     set-default-name: func(value: string);
     add: func(key: u32, values: list<string>);
     build: func() -> names;
