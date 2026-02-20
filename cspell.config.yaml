@@ -1,46 +1,16 @@
 version: "0.2"
-words:
-  - ABNF
-  - automagically
-  - bindgen
-  - Bulthuis
-  - bytecodealliance
-  - camelcase
-  - cdylib
-  - clippy
-  - dealloc
-  - Deque
-  - endregion
-  - esbenp
-  - gloo
-  - Hasher
-  - Inflector
-  - Itertools
-  - lcov
-  - luvdasun
-  - notdir
-  - oneshot
-  - openapi
-  - postpublish
-  - postversion
-  - presolved
-  - preversion
-  - realloc
-  - repr
-  - reqwest
-  - rlib
-  - ryanluker
-  - serde
-  - Skiffa
-  - smol
-  - snakecase
-  - structs
-  - tamasfe
-  - unalias
-  - urlencoding
-  - vadimcn
+import:
+  - "@cspell/dict-en_us/cspell-ext.json"
+dictionaries:
+  - en_us
+  - custom
+languageId: "*"
+allowCompoundWords: true
 useGitignore: true
 files:
   - "**"
 enableFiletypes:
   - "*"
+dictionaryDefinitions:
+  - name: custom
+    path: dictionary.txt
