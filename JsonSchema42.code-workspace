@@ -57,16 +57,4 @@
     },
     "rust-analyzer.cargo.target": "wasm32-unknown-unknown",
   },
-  "extensions": {
-    "recommendations": [
-      "ryanluker.vscode-coverage-gutters",
-      "esbenp.prettier-vscode",
-      "streetsidesoftware.code-spell-checker",
-      "rust-lang.rust-analyzer",
-      "vadimcn.vscode-lldb",
-      "editorconfig.editorconfig",
-      "tamasfe.even-better-toml",
-    ],
-    "unwantedRecommendations": [],
-  },
 }
