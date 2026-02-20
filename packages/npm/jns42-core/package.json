@@ -43,7 +43,7 @@
   ],
   "homepage": "https://www.JsonSchema42.org",
   "devDependencies": {
-    "@bytecodealliance/jco": "^1.15.0"
+    "@bytecodealliance/jco": "^1.17.0"
   },
   "engines": {
     "node": ">=18"
