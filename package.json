@@ -5,6 +5,8 @@
     "packages/npm/*"
   ],
   "scripts": {
+    "tsc": "tsc --build",
+    "tsc-watch": "npm run tsc -- --watch",
     "spelling": "cspell",
     "formatting": "prettier --check *"
   },

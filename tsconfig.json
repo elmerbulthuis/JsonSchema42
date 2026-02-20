@@ -1,0 +1,4 @@
+{
+  "references": [{ "path": "packages/npm/jns42-lib" }, { "path": "packages/npm/jns42-generator" }],
+  "files": []
+}
