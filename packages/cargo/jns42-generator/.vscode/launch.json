@@ -16,31 +16,6 @@
       },
       "args": [],
       "cwd": "${workspaceFolder}"
-    },
-    {
-      "type": "lldb",
-      "request": "launch",
-      "name": "package file",
-      "cargo": {
-        "args": [
-          "build",
-          "--bin",
-          "${workspaceFolderBasename}",
-          "--package",
-          "${workspaceFolderBasename}"
-        ]
-      },
-      "args": [
-        "package",
-        "${file}",
-        "--package-directory",
-        ".generated/file/${fileBasenameNoExtension}",
-        "--package-name",
-        "${fileBasenameNoExtension}",
-        "--package-version",
-        "0.0.0"
-      ],
-      "cwd": "${workspaceFolder}"
     }
   ]
 }

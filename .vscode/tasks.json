@@ -22,6 +22,13 @@
       "label": "tsc-watch",
       "group": "build",
       "problemMatcher": ["$tsc-watch"]
+    },
+    {
+      "type": "cargo",
+      "command": "test",
+      "problemMatcher": ["$rustc"],
+      "group": "test",
+      "label": "cargo test"
     }
   ]
 }

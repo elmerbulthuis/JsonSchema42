@@ -23,7 +23,7 @@
         "package",
         "${file}",
         "--package-directory",
-        ".generated/file/${fileBasenameNoExtension}",
+        ".generated/file/npm/${fileBasenameNoExtension}",
         "--package-name",
         "${fileBasenameNoExtension}",
         "--package-version",
@@ -37,6 +37,25 @@
       "outFiles": ["${workspaceFolder}/packages/npm/*/transpiled/**/*.js"],
       "preLaunchTask": "tsc-watch",
       "outputCapture": "std"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "jns42-generator cargo",
+      "cargo": {
+        "args": ["build", "--bin", "jns42-generator", "--package", "jns42-generator"]
+      },
+      "args": [
+        "package",
+        "${file}",
+        "--package-directory",
+        ".generated/file/cargo/${fileBasenameNoExtension}",
+        "--package-name",
+        "${fileBasenameNoExtension}",
+        "--package-version",
+        "0.0.0"
+      ],
+      "cwd": "${workspaceFolder}"
     }
   ]
 }
