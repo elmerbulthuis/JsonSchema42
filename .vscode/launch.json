@@ -34,7 +34,7 @@
       },
       "cwd": "${workspaceFolder}",
       "sourceMaps": true,
-      "outFiles": ["${workspaceFolder}/transpiled/**/*.js"],
+      "outFiles": ["${workspaceFolder}/packages/npm/*/transpiled/**/*.js"],
       "preLaunchTask": "tsc-watch",
       "outputCapture": "std"
     }
