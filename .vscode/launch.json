@@ -4,16 +4,13 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "run file",
+      "name": "typescript file",
       "program": "${file}",
       "args": [],
-      "env": {
-        "NODE_ENV": "development"
-      },
       "cwd": "${workspaceFolder}",
       "sourceMaps": true,
-      "outFiles": ["${workspaceFolder}/transpiled/**/*.js"],
-      "preLaunchTask": "build",
+      "outFiles": ["${workspaceFolder}/packages/npm/*/transpiled/**/*.js"],
+      "preLaunchTask": "tsc-watch",
       "outputCapture": "std"
     }
   ]

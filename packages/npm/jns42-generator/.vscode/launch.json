@@ -4,21 +4,6 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "run file",
-      "program": "${file}",
-      "args": [],
-      "env": {
-        "NODE_ENV": "development"
-      },
-      "cwd": "${workspaceFolder}",
-      "sourceMaps": true,
-      "outFiles": ["${workspaceFolder}/transpiled/**/*.js"],
-      "preLaunchTask": "build",
-      "outputCapture": "std"
-    },
-    {
-      "type": "node",
-      "request": "launch",
       "name": "package file",
       "program": "${workspaceFolder}/src/program.ts",
       "args": [
