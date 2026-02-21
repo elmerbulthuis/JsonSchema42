@@ -4,6 +4,7 @@ version: "3"
 
 tasks:
   npm-install:
+    run: once
     sources:
       - package-lock.json
     generates:
@@ -12,14 +13,15 @@ tasks:
       - npm install
 
   build:
+    run: once
     deps:
-      - npm-install
       - task: build-cargo-jns42-core
       - task: build-npm-jns42-core
       - task: build-npm-jns42-lib
       - task: build-npm-jns42-generator
 
   build-cargo-jns42-core:
+    run: once
     sources:
       - Cargo.lock
       - packages/cargo/jns42-core/src/**
@@ -38,6 +40,7 @@ tasks:
         target/wasm32-unknown-unknown/release/jns42_core.wasm
 
   build-npm-jns42-core:
+    run: once
     sources:
       - package-lock.json
       - packages/npm/jns42-core/src/**
@@ -50,6 +53,7 @@ tasks:
       - npm --workspace @jns42/core run generate
 
   build-npm-jns42-lib:
+    run: once
     sources:
       - package-lock.json
       - packages/npm/jns42-lib/src/**
@@ -64,6 +68,7 @@ tasks:
       - npm run --workspace @jns42/lib tsc
 
   build-npm-jns42-generator:
+    run: once
     sources:
       - package-lock.json
       - packages/npm/jns42-generator/src/**
