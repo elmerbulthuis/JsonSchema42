@@ -63,6 +63,8 @@ tasks:
     run: once
     deps:
       - build:npm
+    env:
+      NODE_V8_COVERAGE: "{{.PWD}}/coverage"
     cmds:
       - npm test
 
