@@ -58,7 +58,7 @@ tasks:
     deps:
       - npm-install
     cmds:
-      - npm run --workspace packages/npm/jns42-lib tsc
+      - npm run --workspace @jns42/lib tsc
 
   build-npm-jns42-generator:
     sources:
@@ -74,4 +74,4 @@ tasks:
       - build-npm-jns42-core
       - build-npm-jns42-lib
     cmds:
-      - npm run --workspace packages/npm/jns42-generator tsc
+      - npm run --workspace @jns42/generator tsc
