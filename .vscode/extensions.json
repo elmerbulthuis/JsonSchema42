@@ -8,6 +8,7 @@
     "vadimcn.vscode-lldb",
     "editorconfig.editorconfig",
     "tamasfe.even-better-toml",
-    "sonarsource.sonarlint-vscode"
+    "sonarsource.sonarlint-vscode",
+    "task.vscode-task"
   ]
 }
