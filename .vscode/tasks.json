@@ -33,6 +33,21 @@
         "RUSTFLAGS": "--codegen instrument-coverage=all",
         "LLVM_PROFILE_FILE": "${workspaceFolder}/coverage/default_%m_%p.profraw"
       }
+    },
+    {
+      "type": "shell",
+      "command": "rm coverage/*",
+      "problemMatcher": [],
+      "group": "test",
+      "label": "clear coverage"
+    },
+    {
+      "type": "shell",
+      "command": "grcov coverage/*.profraw --binary-path target/debug/ --output-path coverage/lcov.info",
+      "problemMatcher": [],
+      "group": "test",
+      "label": "generate coverage",
+      "dependsOn": ["cargo test"]
     }
   ]
 }
