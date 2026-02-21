@@ -55,7 +55,7 @@ tasks:
     env:
       CARGO_INCREMENTAL: "0"
       RUSTFLAGS: "--codegen instrument-coverage=all"
-      LLVM_PROFILE_FILE: "coverage/default_%m_%p.profraw"
+      LLVM_PROFILE_FILE: "{{.PWD}}/coverage/default_%m_%p.profraw"
     cmds:
       - cargo test --quiet
 
