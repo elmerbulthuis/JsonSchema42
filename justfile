@@ -32,11 +32,11 @@ build-npm-jns42-generator: \
   build-npm-jns42-lib \
   build-npm-jns42-core \
 
-  npm --workspace @jns42/generator run compile
+  npm run tsc
   npm --workspace @jns42/generator run bundle
 
 build-npm-jns42-lib: \
 
-  npm --workspace @jns42/lib run compile
+  npm run tsc
   npm --workspace @jns42/lib run bundle
 
