@@ -7,7 +7,7 @@
   "scripts": {
     "tsc": "tsc --build",
     "tsc-watch": "npm run tsc -- --watch",
-    "test": "node --test packages/npm/*/transpiled/**/*.test.js",
+    "test": "node --test packages/npm/*/transpiled/**/*.test.js packages/npm/*/src/**/*.test.js",
     "spelling": "cspell",
     "formatting": "prettier --check --ignore-unknown *",
     "fix-formatting": "prettier --write --ignore-unknown *"
