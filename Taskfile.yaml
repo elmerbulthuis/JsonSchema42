@@ -5,18 +5,20 @@ version: "3"
 tasks:
   install:
     run: once
-    deps:
+    cmds:
       - task: install:npm
 
   build:
     run: once
-    deps:
-      - task: build:cargo:jns42-core
-      - task: build:cargo:jns42-generator
-      - task: build:cargo:jns42-tester
-      - task: build:npm:jns42-core
-      - task: build:npm:jns42-lib
-      - task: build:npm:jns42-generator
+    cmds:
+      - task: build:cargo
+      - task: build:npm
+
+  test:
+    run: once
+    cmds:
+      - task: test:cargo
+      - task: test:npm
 
   install:npm:
     run: once
@@ -26,6 +28,35 @@ tasks:
       - node_modules/**
     cmds:
       - npm install
+
+  build:cargo:
+    run: once
+    cmds:
+      - task: build:cargo:jns42-core
+      - task: build:cargo:jns42-generator
+      - task: build:cargo:jns42-tester
+
+  build:npm:
+    run: once
+    cmds:
+      - task: build:npm:jns42-core
+      - task: build:npm:jns42-lib
+      - task: build:npm:jns42-generator
+
+  test:cargo:
+    run: once
+    env:
+      RUSTFLAGS": --codegen instrument-coverage=all
+      LLVM_PROFILE_FILE": coverage/default_%m_%p.profraw
+    cmds:
+      - cargo test --quiet
+
+  test:npm:
+    run: once
+    deps:
+      - build:npm
+    cmds:
+      - npm test
 
   build:cargo:jns42-core:
     run: once
