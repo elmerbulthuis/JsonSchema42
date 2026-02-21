@@ -34,6 +34,7 @@ tasks:
         --package jns42-core 
         --target wasm32-unknown-unknown
         --release
+        --quiet
       - >
         wasm-tools component new
         --output target/wasm32-unknown-unknown/release/jns42_core.component.wasm
