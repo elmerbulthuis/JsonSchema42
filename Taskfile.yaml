@@ -3,7 +3,22 @@ $schema: https://taskfile.dev/schema.json
 version: "3"
 
 tasks:
-  npm-install:
+  install:
+    run: once
+    deps:
+      - task: install:npm
+
+  build:
+    run: once
+    deps:
+      - task: build:cargo:jns42-core
+      - task: build:cargo:jns42-generator
+      - task: build:cargo:jns42-tester
+      - task: build:npm:jns42-core
+      - task: build:npm:jns42-lib
+      - task: build:npm:jns42-generator
+
+  install:npm:
     run: once
     sources:
       - package-lock.json
@@ -12,17 +27,7 @@ tasks:
     cmds:
       - npm install
 
-  build:
-    run: once
-    deps:
-      - task: build-cargo-jns42-core
-      - task: build-cargo-jns42-generator
-      - task: build-cargo-jns42-tester
-      - task: build-npm-jns42-core
-      - task: build-npm-jns42-lib
-      - task: build-npm-jns42-generator
-
-  build-cargo-jns42-core:
+  build:cargo:jns42-core:
     run: once
     sources:
       - Cargo.lock
@@ -47,7 +52,7 @@ tasks:
         --output target/wasm32-unknown-unknown/release/jns42_core.component.wasm
         target/wasm32-unknown-unknown/release/jns42_core.wasm
 
-  build-cargo-jns42-generator:
+  build:cargo:jns42-generator:
     run: once
     sources:
       - Cargo.lock
@@ -55,7 +60,7 @@ tasks:
     generates:
       - target/release/jns42-generator
     deps:
-      - build-cargo-jns42-core
+      - build:cargo:jns42-core
     cmds:
       - >
         cargo build
@@ -63,7 +68,7 @@ tasks:
         --release
         --quiet
 
-  build-cargo-jns42-tester:
+  build:cargo:jns42-tester:
     run: once
     sources:
       - Cargo.lock
@@ -71,7 +76,7 @@ tasks:
     generates:
       - target/release/jns42-tester
     deps:
-      - build-cargo-jns42-core
+      - build:cargo:jns42-core
     cmds:
       - >
         cargo build
@@ -79,7 +84,7 @@ tasks:
         --release
         --quiet
 
-  build-npm-jns42-core:
+  build:npm:jns42-core:
     run: once
     sources:
       - package-lock.json
@@ -87,12 +92,12 @@ tasks:
     generates:
       - packages/npm/jns42-core/dist/**
     deps:
-      - npm-install
-      - build-cargo-jns42-core
+      - install:npm
+      - build:cargo:jns42-core
     cmds:
       - npm --workspace @jns42/core run generate
 
-  build-npm-jns42-lib:
+  build:npm:jns42-lib:
     run: once
     sources:
       - package-lock.json
@@ -104,12 +109,12 @@ tasks:
       - packages/npm/jns42-lib/bundled/**
       - packages/npm/jns42-lib/tsconfig.tsbuildinfo
     deps:
-      - npm-install
+      - install:npm
     cmds:
       - npm --workspace @jns42/lib run tsc
       - npm --workspace @jns42/lib run bundle
 
-  build-npm-jns42-generator:
+  build:npm:jns42-generator:
     run: once
     sources:
       - package-lock.json
@@ -121,9 +126,9 @@ tasks:
       - packages/npm/jns42-generator/bundled/**
       - packages/npm/jns42-generator/tsconfig.tsbuildinfo
     deps:
-      - npm-install
-      - build-npm-jns42-core
-      - build-npm-jns42-lib
+      - install:npm
+      - build:npm:jns42-core
+      - build:npm:jns42-lib
     cmds:
       - npm --workspace @jns42/generator run tsc
       - npm --workspace @jns42/generator run bundle
