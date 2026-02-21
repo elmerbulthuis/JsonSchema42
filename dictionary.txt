@@ -11,6 +11,7 @@ Deque
 endregion
 esbenp
 gloo
+grcov
 Hasher
 Inflector
 Itertools

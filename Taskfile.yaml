@@ -17,8 +17,15 @@ tasks:
   test:
     run: once
     cmds:
+      - >
+        rm -rf coverage/*
       - task: test:cargo
       - task: test:npm
+      - >
+        grcov
+        --binary-path target/debug/
+        --output-path coverage/lcov.info
+        coverage/*.profraw
 
   install:npm:
     run: once
@@ -46,8 +53,9 @@ tasks:
   test:cargo:
     run: once
     env:
-      RUSTFLAGS": --codegen instrument-coverage=all
-      LLVM_PROFILE_FILE": coverage/default_%m_%p.profraw
+      CARGO_INCREMENTAL: "0"
+      RUSTFLAGS: "--codegen instrument-coverage=all"
+      LLVM_PROFILE_FILE: "coverage/default_%m_%p.profraw"
     cmds:
       - cargo test --quiet
 
