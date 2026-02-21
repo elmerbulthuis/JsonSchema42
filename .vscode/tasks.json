@@ -28,7 +28,11 @@
       "command": "test",
       "problemMatcher": ["$rustc"],
       "group": "test",
-      "label": "cargo test"
+      "label": "cargo test",
+      "env": {
+        "RUSTFLAGS": "--codegen instrument-coverage=all",
+        "LLVM_PROFILE_FILE": "${workspaceFolder}/coverage/default_%m_%p.profraw"
+      }
     }
   ]
 }
