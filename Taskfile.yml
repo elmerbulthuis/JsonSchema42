@@ -1,0 +1,23 @@
+$schema: https://taskfile.dev/schema.json
+
+version: "3"
+
+tasks:
+  npm-install:
+    sources:
+      - package-lock.json
+    generates:
+      - node_modules/**
+
+  npm-tsc:
+    sources:
+      - packages/npm/*/src/**.ts
+      - packages/npm/*/tsconfig.json
+    generates:
+      - packages/npm/*/transpiled/**
+      - packages/npm/*/typed/**
+      - packages/npm/*/tsconfig.tsbuildinfo
+    deps:
+      - npm-install
+    cmds:
+      - npm run tsc
