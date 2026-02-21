@@ -9,15 +9,69 @@ tasks:
     generates:
       - node_modules/**
 
-  npm-tsc:
+  build:
+    deps:
+      - npm-install
+      - task: build-cargo-jns42-core
+      - task: build-npm-jns42-core
+      - task: build-npm-jns42-lib
+      - task: build-npm-jns42-generator
+
+  build-cargo-jns42-core:
     sources:
-      - packages/npm/*/src/**.ts
-      - packages/npm/*/tsconfig.json
+      - Cargo.lock
+      - packages/cargo/jns42-core/src/**
     generates:
-      - packages/npm/*/transpiled/**
-      - packages/npm/*/typed/**
-      - packages/npm/*/tsconfig.tsbuildinfo
+      - target/wasm32-unknown-unknown/release/jns42_core.wasm
+      - target/wasm32-unknown-unknown/release/jns42_core.component.wasm
+    cmds:
+      - >
+        cargo build
+        --package jns42-core 
+        --target wasm32-unknown-unknown
+        --release
+      - >
+        wasm-tools component new
+        --output target/wasm32-unknown-unknown/release/jns42_core.component.wasm
+        target/wasm32-unknown-unknown/release/jns42_core.wasm
+
+  build-npm-jns42-core:
+    sources:
+      - package-lock.json
+      - packages/npm/jns42-core/src/**
+    generates:
+      - packages/npm/jns42-core/dist/**
     deps:
       - npm-install
     cmds:
-      - npm run tsc
+      - npm --workspace @jns42/core run generate
+
+  build-npm-jns42-lib:
+    sources:
+      - package-lock.json
+      - packages/npm/jns42-lib/src/**
+      - packages/npm/jns42-lib/tsconfig.json
+    generates:
+      - packages/npm/jns42-lib/transpiled/**
+      - packages/npm/jns42-lib/typed/**
+      - packages/npm/jns42-lib/tsconfig.tsbuildinfo
+    deps:
+      - npm-install
+    cmds:
+      - npm run --workspace packages/npm/jns42-lib tsc
+
+  build-npm-jns42-generator:
+    sources:
+      - package-lock.json
+      - packages/npm/jns42-generator/src/**
+      - packages/npm/jns42-generator/tsconfig.json
+    generates:
+      - packages/npm/jns42-generator/transpiled/**
+      - packages/npm/jns42-generator/typed/**
+      - packages/npm/jns42-generator/tsconfig.tsbuildinfo
+    deps:
+      - npm-install
+      - build-npm-jns42-core
+      - build-npm-jns42-lib
+    cmds:
+      - npm run --workspace packages/npm/jns42-generator tsc

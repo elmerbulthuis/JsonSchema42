@@ -19,6 +19,7 @@
     "./bundled/**"
   ],
   "scripts": {
+    "tsc": "tsc --build",
     "prepack": "npm run build",
     "build": "just build-npm-jns42-lib",
     "bundle": "rollup --config rollup.config.mjs"

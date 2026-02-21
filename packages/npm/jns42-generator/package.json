@@ -23,6 +23,7 @@
     "jns42-generator": "bin/program.js"
   },
   "scripts": {
+    "tsc": "tsc --build",
     "prepack": "npm run build",
     "build": "just build-npm-jns42-generator",
     "bundle": "rollup --config rollup.config.mjs"
