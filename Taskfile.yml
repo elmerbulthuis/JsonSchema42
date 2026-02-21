@@ -62,11 +62,13 @@ tasks:
     generates:
       - packages/npm/jns42-lib/transpiled/**
       - packages/npm/jns42-lib/typed/**
+      - packages/npm/jns42-lib/bundled/**
       - packages/npm/jns42-lib/tsconfig.tsbuildinfo
     deps:
       - npm-install
     cmds:
-      - npm run --workspace @jns42/lib tsc
+      - npm --workspace @jns42/lib run tsc
+      - npm --workspace @jns42/lib run bundle
 
   build-npm-jns42-generator:
     run: once
@@ -77,10 +79,12 @@ tasks:
     generates:
       - packages/npm/jns42-generator/transpiled/**
       - packages/npm/jns42-generator/typed/**
+      - packages/npm/jns42-generator/bundled/**
       - packages/npm/jns42-generator/tsconfig.tsbuildinfo
     deps:
       - npm-install
       - build-npm-jns42-core
       - build-npm-jns42-lib
     cmds:
-      - npm run --workspace @jns42/generator tsc
+      - npm --workspace @jns42/generator run tsc
+      - npm --workspace @jns42/generator run bundle
