@@ -8,6 +8,8 @@ tasks:
       - package-lock.json
     generates:
       - node_modules/**
+    cmds:
+      - npm install
 
   build:
     deps:
@@ -43,6 +45,7 @@ tasks:
       - packages/npm/jns42-core/dist/**
     deps:
       - npm-install
+      - build-cargo-jns42-core
     cmds:
       - npm --workspace @jns42/core run generate
 
