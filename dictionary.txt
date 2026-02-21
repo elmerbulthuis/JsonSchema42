@@ -15,6 +15,7 @@ Hasher
 Inflector
 Itertools
 lcov
+libjns
 luvdasun
 notdir
 oneshot

@@ -16,6 +16,8 @@ tasks:
     run: once
     deps:
       - task: build-cargo-jns42-core
+      - task: build-cargo-jns42-generator
+      - task: build-cargo-jns42-tester
       - task: build-npm-jns42-core
       - task: build-npm-jns42-lib
       - task: build-npm-jns42-generator
@@ -26,9 +28,14 @@ tasks:
       - Cargo.lock
       - packages/cargo/jns42-core/src/**
     generates:
-      - target/wasm32-unknown-unknown/release/jns42_core.wasm
-      - target/wasm32-unknown-unknown/release/jns42_core.component.wasm
+      - target/release/libjns42_core.*
+      - target/wasm32-unknown-unknown/release/jns42_core.*
     cmds:
+      - >
+        cargo build
+        --package jns42-core 
+        --release
+        --quiet
       - >
         cargo build
         --package jns42-core 
@@ -39,6 +46,38 @@ tasks:
         wasm-tools component new
         --output target/wasm32-unknown-unknown/release/jns42_core.component.wasm
         target/wasm32-unknown-unknown/release/jns42_core.wasm
+
+  build-cargo-jns42-generator:
+    run: once
+    sources:
+      - Cargo.lock
+      - packages/cargo/jns42-generator/src/**
+    generates:
+      - target/release/jns42-generator
+    deps:
+      - build-cargo-jns42-core
+    cmds:
+      - >
+        cargo build
+        --package jns42-generator 
+        --release
+        --quiet
+
+  build-cargo-jns42-tester:
+    run: once
+    sources:
+      - Cargo.lock
+      - packages/cargo/jns42-tester/src/**
+    generates:
+      - target/release/jns42-tester
+    deps:
+      - build-cargo-jns42-core
+    cmds:
+      - >
+        cargo build
+        --package jns42-tester 
+        --release
+        --quiet
 
   build-npm-jns42-core:
     run: once
