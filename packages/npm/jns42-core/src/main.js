@@ -7,30 +7,31 @@ async function getCoreModule(path) {
   return module;
 }
 
-const instance = await instantiate(getCoreModule, {
+// instantiate returns a promise, but not according to the typings!
+// wrapping it in a Promise.resolve makes everybody happy
+const instance = await Promise.resolve(instantiate(getCoreModule, {
   "jns42:core/imports": {
     fetchText(location) {
       const locationLower = location.toLowerCase();
       try {
         if (locationLower.startsWith("http://") || locationLower.startsWith("https://")) {
-          throw "TODO";
-          // const result = await fetch(location);
-          // const text = await result.text();
-          // return text;
+          throw new TypeError("async fetch text not supported (yet!)")
         }
       } catch (error) {
-        throw "http-error";
+        console.error(error);
+        throw new Error("http-error");
       }
 
       try {
         const text = fs.readFileSync(location, "utf-8");
         return text;
       } catch (error) {
-        throw "io-error";
+        console.error(error);
+        throw new Error("io-error");
       }
     },
   },
-});
+}));
 
 export const documents = instance.documents;
 export const models = instance.models;

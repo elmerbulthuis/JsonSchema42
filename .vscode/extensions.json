@@ -7,6 +7,7 @@
     "rust-lang.rust-analyzer",
     "vadimcn.vscode-lldb",
     "editorconfig.editorconfig",
-    "tamasfe.even-better-toml"
+    "tamasfe.even-better-toml",
+    "sonarsource.sonarlint-vscode"
   ]
 }
