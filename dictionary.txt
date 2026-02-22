@@ -16,6 +16,7 @@ Hasher
 Inflector
 Itertools
 lcov
+lcovonly
 libjns
 luvdasun
 notdir

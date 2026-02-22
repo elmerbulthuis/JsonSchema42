@@ -18,14 +18,13 @@ tasks:
     run: once
     cmds:
       - >
-        rm -rf coverage
+        rm -rf coverage/
       - task: test:cargo
       - task: test:npm
       - >
-        grcov
-        --binary-path target/debug/
-        --output-path coverage/lcov-rust.info
-        coverage/tmp/*.profraw
+        npx lcov-result-merger
+        'coverage/*/lcov.info'
+        > coverage/lcov.info
 
   install:npm:
     run: once
@@ -53,20 +52,35 @@ tasks:
   test:cargo:
     run: once
     env:
-      CARGO_INCREMENTAL: "0"
       RUSTFLAGS: "--codegen instrument-coverage=all"
-      LLVM_PROFILE_FILE: "{{.PWD}}/coverage/tmp/default_%m_%p.profraw"
+      LLVM_PROFILE_FILE: "{{.PWD}}/coverage/rust/default_%m_%p.profraw"
     cmds:
+      - >
+        rm -rf coverage/rust/
       - cargo test --quiet
+      - >
+        grcov
+        --binary-path target/debug/
+        --output-path coverage/rust/lcov.info
+        coverage/rust/*.profraw
 
   test:npm:
     run: once
     deps:
       - build:npm
     env:
-      NODE_V8_COVERAGE: "{{.PWD}}/coverage/tmp"
+      NODE_V8_COVERAGE: "{{.PWD}}/coverage/node"
     cmds:
-      - npm test
+      - >
+        rm -rf coverage/node/
+      - >
+        npm test
+      - >
+        npx c8 report
+        --all
+        --reporter lcovonly
+        --temp-directory coverage/node/
+        --reports-dir coverage/node/
 
   build:cargo:jns42-core:
     run: once
