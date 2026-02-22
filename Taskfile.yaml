@@ -26,6 +26,7 @@ tasks:
         --add-tracefile 'coverage/*/lcov.info'
         --output-file coverage/lcov.info
         --ignore-errors inconsistent,inconsistent
+        --include 'packages/**'
       - >
         genhtml coverage/lcov.info --output-directory coverage/html
 
