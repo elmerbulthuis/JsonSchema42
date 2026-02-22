@@ -28,7 +28,10 @@ tasks:
         --ignore-errors inconsistent,inconsistent
         --include 'packages/**'
       - >
-        genhtml coverage/lcov.info --output-directory coverage/html
+        genhtml 
+        --output-directory coverage/html
+        --flat
+        coverage/lcov.info
 
   install:npm:
     run: once
