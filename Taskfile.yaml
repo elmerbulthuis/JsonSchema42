@@ -22,9 +22,12 @@ tasks:
       - task: test:cargo
       - task: test:npm
       - >
-        npx lcov-result-merger
-        'coverage/*/lcov.info'
-        > coverage/lcov.info
+        lcov
+        --add-tracefile 'coverage/*/lcov.info'
+        --output-file coverage/lcov.info
+        --ignore-errors inconsistent,inconsistent
+      - >
+        genhtml coverage/lcov.info --output-directory coverage/html
 
   install:npm:
     run: once
@@ -78,6 +81,7 @@ tasks:
       - >
         npx c8 report
         --all
+        --exclude ""
         --reporter lcovonly
         --temp-directory coverage/node/
         --reports-dir coverage/node/
