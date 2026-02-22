@@ -195,3 +195,67 @@ tasks:
     cmds:
       - npm --workspace @jns42/generator run tsc
       - npm --workspace @jns42/generator run bundle
+
+  test:cargo:cases:
+    run: once
+    deps:
+      - build:cargo:jns42-tester
+      - build:cargo:jns42-generator
+    cmds:
+      - >
+        cargo run
+        --release 
+        --bin jns42-tester
+        --
+        cases
+        --type cargo
+        --cases-directory fixtures/cases
+        --output-directory .generated/cargo/cases
+
+  test:cargo:specifications:
+    run: once
+    deps:
+      - build:cargo:jns42-tester
+      - build:cargo:jns42-generator
+    cmds:
+      - >
+        cargo run
+        --release 
+        --bin jns42-tester
+        --
+        specifications
+        --type cargo
+        --specifications-directory fixtures/specifications
+        --output-directory .generated/cargo/specifications
+
+  test:npm:cases:
+    run: once
+    deps:
+      - build:cargo:jns42-tester
+      - build:npm:jns42-generator
+    cmds:
+      - >
+        cargo run
+        --release 
+        --bin jns42-tester
+        --
+        cases
+        --type npm
+        --cases-directory fixtures/cases
+        --output-directory .generated/npm/cases
+
+  test:npm:specifications:
+    run: once
+    deps:
+      - build:cargo:jns42-tester
+      - build:npm:jns42-generator
+    cmds:
+      - >
+        cargo run
+        --release 
+        --bin jns42-tester
+        --
+        specifications
+        --type npm
+        --specifications-directory fixtures/specifications
+        --output-directory .generated/npm/specifications
