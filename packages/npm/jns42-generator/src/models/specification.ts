@@ -47,9 +47,6 @@ export function loadSpecification(
     const transformers = [
       core.SchemaTransform.Explode,
       core.SchemaTransform.SingleType,
-      core.SchemaTransform.ResolveSingleAllOf,
-      core.SchemaTransform.ResolveSingleAnyOf,
-      core.SchemaTransform.ResolveSingleOneOf,
       core.SchemaTransform.FlattenAllOf,
       core.SchemaTransform.FlattenAnyOf,
       core.SchemaTransform.FlattenOneOf,
@@ -59,8 +56,6 @@ export function loadSpecification(
       core.SchemaTransform.InheritAnyOf,
       core.SchemaTransform.InheritOneOf,
       core.SchemaTransform.InheritReference,
-      core.SchemaTransform.ResolveAnyOf,
-      core.SchemaTransform.ResolveAllOf,
       core.SchemaTransform.ResolveNot,
       core.SchemaTransform.ResolveIfThenElse,
       core.SchemaTransform.ResolveSingleAllOf,

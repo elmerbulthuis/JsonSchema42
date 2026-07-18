@@ -82,6 +82,16 @@ export interface UnionTypeModel {
   readonly members: [number, ...number[]];
 }
 
+export interface IntersectionTypeModel {
+  readonly type: "intersection";
+  readonly members: [number, ...number[]];
+}
+
+export interface PowerSetTypeModel {
+  readonly type: "power-set";
+  readonly members: [number, ...number[]];
+}
+
 export interface ReferenceTypeModel {
   readonly type: "reference";
   readonly reference: number;
@@ -110,6 +120,8 @@ export type TypeModel = MetadataTypeModel &
     | ArrayTypeModel
     | ObjectTypeModel
     | UnionTypeModel
+    | IntersectionTypeModel
+    | PowerSetTypeModel
     | ReferenceTypeModel
   );
 
@@ -134,10 +146,10 @@ export function toTypeModel(arena: core.SchemaArenaContainer, key: number): Type
   }
 
   if (item.allOf != null) {
-    assert(item.allOf.length === 0, "unexpected allOf");
+    assert(item.allOf.length > 1, "unexpected single allOf");
   }
   if (item.anyOf != null) {
-    assert(item.anyOf.length === 0, "unexpected anyOf");
+    assert(item.anyOf.length > 1, "unexpected single anyOf");
   }
   if (item.oneOf != null) {
     assert(item.oneOf.length > 1, "unexpected single oneOf");
@@ -150,6 +162,8 @@ export function toTypeModel(arena: core.SchemaArenaContainer, key: number): Type
   const { reference, propertyNames, mapProperties, arrayItems, contains } = item;
 
   const oneOf = item.oneOf != null ? ([...item.oneOf] as [number, ...number[]]) : undefined;
+  const allOf = item.allOf != null ? ([...item.allOf] as [number, ...number[]]) : undefined;
+  const anyOf = item.anyOf != null ? ([...item.anyOf] as [number, ...number[]]) : undefined;
   const tupleItems = item.tupleItems != null ? [...item.tupleItems] : undefined;
 
   const { objectProperties, patternProperties, dependentSchemas } = item;
@@ -370,6 +384,42 @@ export function toTypeModel(arena: core.SchemaArenaContainer, key: number): Type
       type: "union",
       members: oneOf,
     } as MetadataTypeModel & UnionTypeModel;
+  }
+
+  if (allOf != null) {
+    assert(type == null, "unexpected type");
+    assert(reference == null, "unexpected reference");
+
+    return {
+      location,
+      title,
+      description,
+      examples,
+      deprecated,
+
+      exact,
+
+      type: "intersection",
+      members: allOf,
+    } as MetadataTypeModel & IntersectionTypeModel;
+  }
+
+  if (anyOf != null) {
+    assert(type == null, "unexpected type");
+    assert(reference == null, "unexpected reference");
+
+    return {
+      location,
+      title,
+      description,
+      examples,
+      deprecated,
+
+      exact,
+
+      type: "power-set",
+      members: anyOf,
+    } as MetadataTypeModel & PowerSetTypeModel;
   }
 
   return {
