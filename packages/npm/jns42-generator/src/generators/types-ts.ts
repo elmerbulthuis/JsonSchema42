@@ -237,6 +237,34 @@ export function* generateTypesTsCode(specification: models.Specification) {
           `;
         return;
       }
+
+      case "intersection": {
+        yield itt`
+            ${joinIterable(
+              [...item.members].map(
+                (element) => itt`
+                  ${generateTypeReference(element)}
+                `,
+              ),
+              " &\n",
+            )}
+          `;
+        return;
+      }
+
+      case "power-set": {
+        yield itt`utilities.PowerSet<[
+            ${joinIterable(
+              [...item.members].map(
+                (element) => itt`
+                  ${generateTypeReference(element)}
+                `,
+              ),
+              " ,\n",
+            )}
+          ]>`;
+        return;
+      }
     }
   }
 }
