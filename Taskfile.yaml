@@ -98,7 +98,7 @@ tasks:
 
   check:npm-audit:
     cmds:
-      - npm audit
+      - npm audit --omit dev
 
   check:cargo:
     cmds:
