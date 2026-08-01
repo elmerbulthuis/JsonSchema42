@@ -1,0 +1,187 @@
+version: "3"
+
+tasks:
+  install:
+    desc: Install everything
+    cmds:
+      - task: install:node
+      - task: install:rust
+
+  build:
+    run: once
+    cmds:
+      - task: build:tsc
+      - task: build:rollup
+      - task: build:cargo
+
+  check:
+    desc: Check everything
+    cmds:
+      - task: check:prettier
+      - task: check:rustfmt
+      - task: check:cspell
+      - task: check:npm-audit
+      - task: check:cargo
+      - task: check:clippy
+
+  test:
+    cmds:
+      - task: test:node
+      - task: test:cargo
+      - task: test:specifications
+      - task: test:specifications-async
+      - task: test:cases
+
+  fix:
+    desc: Fix everything
+    cmds:
+      - task: fix:prettier
+      - task: fix:rustfmt
+      - task: fix:cargo
+
+  install:node:
+    run: once
+    desc: Install Node.js dependencies
+    cmds:
+      - npm clean-install
+
+  install:rust:
+    run: once
+    cmds:
+      - rustup target add wasm32-unknown-unknown
+      - rustup component add clippy rustfmt
+      - cargo install wasm-bindgen-cli@0.2.100
+
+  build:tsc:
+    run: once
+    deps:
+      - install:node
+      - build:cargo
+    cmds:
+      - npx tsc --build
+
+  build:rollup:
+    run: once
+    deps:
+      - build:tsc
+      - install:node
+    cmds:
+      - npx rollup --config rollup.config.mjs
+
+  build:cargo:
+    run: once
+    deps:
+      - install:rust
+    cmds:
+      - cargo build --release
+      - cargo build --package jns42-core --target wasm32-unknown-unknown --release
+      - wasm-bindgen --target nodejs --out-dir packages/npm/jns42-core/dist target/wasm32-unknown-unknown/release/jns42_core.wasm
+
+  check:prettier:
+    deps:
+      - install:node
+    cmds:
+      - npx prettier --check --ignore-unknown *
+
+  check:cspell:
+    deps:
+      - install:node
+    cmds:
+      - npx cspell
+
+  check:npm-audit:
+    cmds:
+      - npm audit
+
+  check:cargo:
+    cmds:
+      - cargo check
+
+  check:clippy:
+    deps:
+      - install:rust
+    cmds:
+      - cargo clippy --all-targets
+
+  check:rustfmt:
+    deps:
+      - install:rust
+    cmds:
+      - cargo fmt --check
+
+  test:node:
+    deps:
+      - install:node
+      - build:tsc
+    cmds:
+      - node --test packages/npm/*/transpiled/**/*.test.js
+
+  test:cargo:
+    deps:
+      - install:rust
+    cmds:
+      - cargo test --workspace --all-targets
+
+  test:specifications:
+    deps:
+      - build:tsc
+      - build:rollup
+      - build:cargo
+    cmds:
+      - for: ["npm", "cargo"]
+        cmd: >
+          cargo run 
+          --package jns42-tester
+          --
+          specifications
+          --type {{.ITEM}}
+          --specifications-directory fixtures/specifications
+          --output-directory .generated
+
+  test:specifications-async:
+    deps:
+      - build:tsc
+      - build:rollup
+      - build:cargo
+    cmds:
+      - for: ["npm", "cargo"]
+        cmd: >
+          cargo run 
+          --package jns42-tester
+          --
+          specifications
+          --type {{.ITEM}}
+          --specifications-directory fixtures/specifications-async
+          --output-directory .generated
+
+  test:cases:
+    deps:
+      - build:tsc
+      - build:rollup
+      - build:cargo
+    cmds:
+      - for: ["npm"]
+        cmd: >
+          cargo run 
+          --package jns42-tester
+          --
+          cases
+          --type {{.ITEM}}
+          --cases-directory fixtures/cases
+          --output-directory .generated
+
+  fix:prettier:
+    deps:
+      - install:node
+    cmds:
+      - npx prettier --write --ignore-unknown *
+
+  fix:rustfmt:
+    deps:
+      - install:rust
+    cmds:
+      - cargo fmt --check
+
+  fix:cargo:
+    cmds:
+      - cargo fix --allow-dirty
