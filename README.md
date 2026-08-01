@@ -16,16 +16,14 @@ Please check out the readme's one of the packages in the `./packages` directory 
 
 ## Installing
 
-Make sure you have `just` installed on your system, then install everything via `just install-all`.
+Make sure you have `task` installed on your system, then install everything via `task install`.
 
 ## Building
 
-Build everything via `just build-all`.
+Build everything via `task build`.
 
 ## Testing
 
-Run some tests with
+Run tests with
 
-- `just package-specification-npm-all`
-- `just package-specification-cargo-all`
-- `just test-fixture-npm-all`
+- `task test`

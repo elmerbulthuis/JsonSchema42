@@ -4,12 +4,12 @@
   "workspaces": [
     "packages/npm/*"
   ],
-  "scripts": {
-    "spelling": "cspell",
-    "formatting": "prettier --check *"
-  },
   "devDependencies": {
-    "cspell": "^8.19.4",
-    "prettier": "^3.5.3"
+    "@cspell/dict-en_us": "^4.4.36",
+    "@rollup/plugin-replace": "^6.0.3",
+    "cspell": "^10.0.1",
+    "prettier": "^3.9.6",
+    "rollup": "^4.62.4",
+    "typescript": "^7.0.2"
   }
 }

@@ -159,7 +159,7 @@ impl Sentence {
     Self(self.0.iter().cloned().chain([word]).collect())
   }
 
-  pub fn iter(&self) -> Iter<Word> {
+  pub fn iter(&self) -> Iter<'_, Word> {
     self.0.iter()
   }
 }
