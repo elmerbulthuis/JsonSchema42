@@ -77,10 +77,7 @@ impl Arena<ArenaSchemaItem> {
     let mut resolved_key = key;
     let mut resolved_item = self.get_item(resolved_key);
 
-    loop {
-      let Some(alias_key) = resolved_item.get_alias_key() else {
-        break;
-      };
+    while let Some(alias_key) = resolved_item.get_alias_key() {
       resolved_key = alias_key;
       resolved_item = self.get_item(resolved_key);
     }

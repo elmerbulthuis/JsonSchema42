@@ -76,12 +76,7 @@ impl JsonValue {
     field: &str,
   ) -> Option<impl Iterator<Item = (Vec<String>, JsonValue)> + '_> {
     let selected = self.0.as_object()?.get(field)?;
-    let pointer: Vec<_> = pointer
-      .iter()
-      .cloned()
-      .map(|part| part.to_string())
-      .chain([field.to_string()])
-      .collect();
+    let pointer: Vec<_> = pointer.iter().cloned().chain([field.to_string()]).collect();
 
     let result = selected
       .as_array()?
@@ -103,12 +98,7 @@ impl JsonValue {
     field: &str,
   ) -> Option<impl Iterator<Item = (Vec<String>, JsonValue)> + '_> {
     let selected = self.0.as_object()?.get(field)?;
-    let pointer: Vec<_> = pointer
-      .iter()
-      .cloned()
-      .map(|part| part.to_string())
-      .chain([field.to_string()])
-      .collect();
+    let pointer: Vec<_> = pointer.iter().cloned().chain([field.to_string()]).collect();
 
     let result = selected.as_object()?.iter().map(move |(key, sub_node)| {
       (
