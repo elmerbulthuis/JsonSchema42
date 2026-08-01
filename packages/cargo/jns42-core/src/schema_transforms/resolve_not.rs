@@ -42,17 +42,17 @@ pub fn transform(arena: &mut SchemaArena, key: usize) {
     ..item.clone()
   };
 
-  if let Some(required) = &item.required {
-    if let Some(exclude_required) = &sub_item.required {
-      let exclude_required: BTreeSet<_> = exclude_required.iter().collect();
-      let required_new = required
-        .iter()
-        .filter(|value| !exclude_required.contains(value))
-        .cloned()
-        .collect();
+  if let Some(required) = &item.required
+    && let Some(exclude_required) = &sub_item.required
+  {
+    let exclude_required: BTreeSet<_> = exclude_required.iter().collect();
+    let required_new = required
+      .iter()
+      .filter(|value| !exclude_required.contains(value))
+      .cloned()
+      .collect();
 
-      item_new.required = Some(required_new);
-    };
+    item_new.required = Some(required_new);
   };
 
   arena.replace_item(key, item_new);

@@ -88,7 +88,7 @@ tasks:
     deps:
       - install:node
     cmds:
-      - npx prettier --check --ignore-unknown *
+      - npx prettier --check --ignore-unknown .
 
   check:cspell:
     deps:
