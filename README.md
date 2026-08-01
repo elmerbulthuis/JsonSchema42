@@ -16,7 +16,7 @@ Please check out the readme's one of the packages in the `./packages` directory 
 
 ## Installing
 
-Make sure you have `task` installed on your system, then install everything via `task install`.
+Make sure you have [`task`](https://taskfile.dev/) installed on your system, then install everything via `task install`.
 
 ## Building
 
