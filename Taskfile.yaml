@@ -79,7 +79,7 @@ tasks:
         --output target/wasm32-unknown-unknown/release/jns42_core.component.wasm
         target/wasm32-unknown-unknown/release/jns42_core.wasm
       - >
-        jco transpile
+        npx jco transpile
         --instantiation async
         --out-dir packages/npm/jns42-core/dist
         target/wasm32-unknown-unknown/release/jns42_core.component.wasm

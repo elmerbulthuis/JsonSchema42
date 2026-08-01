@@ -5,6 +5,7 @@
     "packages/npm/*"
   ],
   "devDependencies": {
+    "@bytecodealliance/jco": "^1.17.9",
     "@cspell/dict-en_us": "^4.4.36",
     "@rollup/plugin-replace": "^6.0.3",
     "cspell": "^10.0.1",

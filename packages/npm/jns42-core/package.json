@@ -35,9 +35,6 @@
     "core"
   ],
   "homepage": "https://www.JsonSchema42.org",
-  "devDependencies": {
-    "@bytecodealliance/jco": "^1.17.9"
-  },
   "engines": {
     "node": ">=20"
   }
