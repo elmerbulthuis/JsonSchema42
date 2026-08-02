@@ -18,7 +18,7 @@ jobs:
           version: "3.50"
       - uses: actions/setup-node@v4
         with:
-          node-version: "24"
+          node-version: "26"
       - run: rustup default 1.97.0
       - run: task install check
 
@@ -38,6 +38,6 @@ jobs:
           version: "3.50"
       - uses: actions/setup-node@v4
         with:
-          node-version: "24"
+          node-version: "26"
       - run: rustup default 1.97.0
       - run: task build test
