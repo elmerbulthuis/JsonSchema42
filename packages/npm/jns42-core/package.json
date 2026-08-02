@@ -36,6 +36,6 @@
   ],
   "homepage": "https://www.JsonSchema42.org",
   "engines": {
-    "node": ">=20"
+    "node": ">=26"
   }
 }
