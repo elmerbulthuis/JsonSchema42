@@ -12,7 +12,7 @@ import {
 export function* generateTypesTsCode(specification: models.Specification) {
   const packageInfo = readPackageInfo();
 
-  yield core.banner("//", `v${packageInfo.version}`);
+  yield core.utilities.banner("//", `v${packageInfo.version}`);
 
   const { names, typeModels } = specification;
 
@@ -59,7 +59,7 @@ export function* generateTypesTsCode(specification: models.Specification) {
     const item = typeModels.get(itemKey);
     assert(item != null);
 
-    if ("options" in item && item.options != null) {
+    if ("options" in item && item.options.length > 0) {
       yield joinIterable(
         (item.options as any[]).map((option) => JSON.stringify(option)),
         " |\n",

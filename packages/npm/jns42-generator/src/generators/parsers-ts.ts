@@ -12,7 +12,7 @@ import {
 export function* generateParsersTsCode(specification: models.Specification) {
   const packageInfo = readPackageInfo();
 
-  yield core.banner("//", `v${packageInfo.version}`);
+  yield core.utilities.banner("//", `v${packageInfo.version}`);
 
   const { names, typeModels } = specification;
 

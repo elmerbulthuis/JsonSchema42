@@ -1,8 +1,12 @@
 {
   "recommendations": [
-    "task.vscode-task",
+    "bytecodealliance.wit-idl",
+    "ryanluker.vscode-coverage-gutters",
+    "esbenp.prettier-vscode",
+    "streetsidesoftware.code-spell-checker",
     "rust-lang.rust-analyzer",
-    "tamasfe.even-better-toml",
-    "esbenp.prettier-vscode"
+    "vadimcn.vscode-lldb",
+    "editorconfig.editorconfig",
+    "tamasfe.even-better-toml"
   ]
 }
