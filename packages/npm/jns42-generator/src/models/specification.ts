@@ -5,7 +5,7 @@ import { toValidatorModel, ValidatorModel } from "./validator.js";
 
 export interface Specification {
   locationToKeyMap: Map<string, number>;
-  names: core.NamesContainer;
+  names: core.naming.Names;
   typeModels: Map<number, TypeModel>;
   validatorModels: Map<number, ValidatorModel>;
   isMockable: (key: number) => boolean;
@@ -17,13 +17,14 @@ export interface LoadSpecificationConfiguration {
 }
 
 export function loadSpecification(
-  documentContext: core.DocumentContextContainer,
+  documentContext: core.documents.DocumentContext,
   configuration: LoadSpecificationConfiguration,
 ): Specification {
   const { transformMaximumIterations, defaultTypeName } = configuration;
 
   // load the arena
-  const typesArena = core.SchemaArenaContainer.fromDocumentContext(documentContext);
+
+  const typesArena = documentContext.makeSchemaArena();
   const validatorsArena = typesArena.clone();
 
   // generate locationLookup
@@ -42,33 +43,45 @@ export function loadSpecification(
     return key;
   });
 
+  // transform the validatorsArena
+  {
+    const transformers = [] as core.models.SchemaTransform[];
+    let transformIterations = 0;
+    while (validatorsArena.transform(transformers) > 0) {
+      transformIterations++;
+      if (transformIterations < transformMaximumIterations) {
+        continue;
+      }
+      throw new Error("maximum number of iterations reached");
+    }
+  }
+
   // transform the typesArena (note that we are not transforming the validatorsArena!)
   {
-    const transformers = [
-      core.SchemaTransform.GuessTypes,
-      core.SchemaTransform.Explode,
-      core.SchemaTransform.SingleType,
-      core.SchemaTransform.ResolveSingleAllOf,
-      core.SchemaTransform.ResolveSingleAnyOf,
-      core.SchemaTransform.ResolveSingleOneOf,
-      core.SchemaTransform.FlattenAllOf,
-      core.SchemaTransform.FlattenAnyOf,
-      core.SchemaTransform.FlattenOneOf,
-      core.SchemaTransform.FlipAllOfOneOf,
-      core.SchemaTransform.FlipAnyOfOneOf,
-      core.SchemaTransform.FlipAllOfAnyOf,
-      core.SchemaTransform.InheritAllOf,
-      core.SchemaTransform.InheritAnyOf,
-      core.SchemaTransform.InheritOneOf,
-      core.SchemaTransform.InheritReference,
-      core.SchemaTransform.ResolveAnyOf,
-      core.SchemaTransform.ResolveAllOf,
-      core.SchemaTransform.ResolveNot,
-      core.SchemaTransform.ResolveIfThenElse,
-      core.SchemaTransform.ResolveSingleAllOf,
-      core.SchemaTransform.ResolveSingleAnyOf,
-      core.SchemaTransform.ResolveSingleOneOf,
-      core.SchemaTransform.Unalias,
+    const transformers: core.models.SchemaTransform[] = [
+      "guess-types",
+      "explode",
+      "single-type",
+      "resolve-single-all-of",
+      "resolve-single-any-of",
+      "resolve-single-one-of",
+      "flatten-all-of",
+      "flatten-any-of",
+      "flatten-one-of",
+      "flip-all-of-one-of",
+      "flip-any-of-one-of",
+      "inherit-all-of",
+      "inherit-any-of",
+      "inherit-one-of",
+      "inherit-reference",
+      "resolve-all-of",
+      "resolve-any-of",
+      "resolve-not",
+      "resolve-if-then-else",
+      "resolve-single-all-of",
+      "resolve-single-any-of",
+      "resolve-single-one-of",
+      "unalias",
     ];
     let transformIterations = 0;
     while (typesArena.transform(transformers) > 0) {
@@ -83,7 +96,7 @@ export function loadSpecification(
 
   // generate names
   {
-    const transformers = [core.SchemaTransform.Name];
+    const transformers: core.models.SchemaTransform[] = ["name"];
     let transformIterations = 0;
     while (typesArena.transform(transformers) > 0) {
       transformIterations++;
@@ -99,7 +112,7 @@ export function loadSpecification(
     explicitTypeKeys.flatMap((key) => [...typesArena.getAllRelated(key)]),
   );
 
-  const namesBuilder = new core.NamesBuilderContainer();
+  const namesBuilder = new core.naming.NamesBuilder();
   namesBuilder.setDefaultName(defaultTypeName);
 
   for (const key of primaryTypeKeys) {

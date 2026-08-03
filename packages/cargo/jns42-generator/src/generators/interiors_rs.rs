@@ -54,149 +54,149 @@ fn generate_type_token_stream(
     });
 
     return Ok(tokens);
-  } else if let Some(types) = &item.types {
-    if types.len() == 1 {
-      let r#type = types.first().unwrap();
-      match r#type {
-        SchemaType::Never => {
-          tokens.append_all(quote! {
-            pub type #identifier = ();
-          });
-        }
-        SchemaType::Any => {
-          tokens.append_all(quote! {
-            pub type #identifier = serde_json::Value;
-          });
-        }
-        SchemaType::Null => {
-          tokens.append_all(quote! {
-            pub type #identifier = ();
-          });
-        }
-        SchemaType::Boolean => {
-          tokens.append_all(quote! {
-            pub type #identifier = bool;
-          });
-        }
-        SchemaType::Integer => {
-          tokens.append_all(quote! {
-            pub type #identifier = i64;
-          });
-        }
-        SchemaType::Number => {
-          tokens.append_all(quote! {
-            pub type #identifier = f64;
-          });
-        }
-        SchemaType::String => {
-          tokens.append_all(quote! {
-            pub type #identifier = std::string::String;
-          });
-        }
-        SchemaType::Array => {
-          if let Some(tuple_items_keys) = &item.tuple_items {
-            let inner_tokens = tuple_items_keys
-              .iter()
-              .map(|tuple_items_key| {
-                let tuple_items_identifier = specification.get_type_identifier(tuple_items_key);
-
-                quote! { #tuple_items_identifier }
-              })
-              .reduce(|a, b| quote! {#a, #b})
-              .unwrap_or_default();
-
-            tokens.append_all(quote! {
-              pub type #identifier = (
-                #inner_tokens
-              );
-            });
-          } else if let Some(array_items_key) = &item.array_items {
-            let array_items_identifier = specification.get_type_identifier(array_items_key);
-
-            tokens.append_all(quote! {
-              pub type #identifier = std::vec::Vec<#array_items_identifier>;
-            });
-          } else {
-            tokens.append_all(quote! {
-              pub type #identifier = std::vec::Vec<()>;
-            });
-          }
-        }
-        SchemaType::Object => {
-          if let Some(object_properties_entries) = &item.object_properties {
-            let required: HashSet<_> = item
-              .required
-              .as_ref()
-              .map(|value| value.iter().collect())
-              .unwrap_or_default();
-            let inner_tokens = object_properties_entries
-              .iter()
-              .map(|(member_name, object_properties_key)| {
-                let member_identifier =
-                  format_ident!("r#{}", Sentence::new(member_name).to_snake_case());
-                let object_properties_identifier =
-                  specification.get_type_identifier(object_properties_key);
-
-                if required.contains(member_name) {
-                  quote! {
-                    pub #member_identifier: #object_properties_identifier
-                  }
-                } else {
-                  quote! {
-                    pub #member_identifier: std::option::Option<#object_properties_identifier>
-                  }
-                }
-              })
-              .reduce(|a, b| quote! {#a, #b})
-              .unwrap_or_default();
-
-            tokens.append_all(quote! {
-              #[derive(core::fmt::Debug, serde::Serialize, serde::Deserialize, core::clone::Clone)]
-              pub struct #identifier {
-                #inner_tokens
-              }
-            });
-          } else if let Some(map_properties_key) = &item.map_properties {
-            let map_properties_identifier = specification.get_type_identifier(map_properties_key);
-
-            tokens.append_all(quote! {
-              pub type #identifier = std::collections::HashMap<std::string::String, #map_properties_identifier>;
-            });
-          } else {
-            tokens.append_all(quote! {
-              pub type #identifier = std::collections::HashMap<std::string::String, ()>;
-            });
-          }
-        }
-      };
-
-      let boxed = item
-        .types
-        .iter()
-        .flatten()
-        .any(|r#type| *r#type == SchemaType::Object)
-        || item.one_of.is_some();
-
-      if boxed {
+  } else if let Some(types) = &item.types
+    && types.len() == 1
+  {
+    let r#type = types.first().unwrap();
+    match r#type {
+      SchemaType::Never => {
         tokens.append_all(quote! {
-          impl core::convert::From<#type_identifier> for #identifier {
-            fn from(value: #type_identifier) -> Self {
-                *value.0
-            }
-          }
-        });
-      } else {
-        tokens.append_all(quote! {
-          impl core::convert::From<#type_identifier> for #identifier {
-            fn from(value: #type_identifier) -> Self {
-                value.0
-            }
-          }
+          pub type #identifier = ();
         });
       }
+      SchemaType::Any => {
+        tokens.append_all(quote! {
+          pub type #identifier = serde_json::Value;
+        });
+      }
+      SchemaType::Null => {
+        tokens.append_all(quote! {
+          pub type #identifier = ();
+        });
+      }
+      SchemaType::Boolean => {
+        tokens.append_all(quote! {
+          pub type #identifier = bool;
+        });
+      }
+      SchemaType::Integer => {
+        tokens.append_all(quote! {
+          pub type #identifier = i64;
+        });
+      }
+      SchemaType::Number => {
+        tokens.append_all(quote! {
+          pub type #identifier = f64;
+        });
+      }
+      SchemaType::String => {
+        tokens.append_all(quote! {
+          pub type #identifier = std::string::String;
+        });
+      }
+      SchemaType::Array => {
+        if let Some(tuple_items_keys) = &item.tuple_items {
+          let inner_tokens = tuple_items_keys
+            .iter()
+            .map(|tuple_items_key| {
+              let tuple_items_identifier = specification.get_type_identifier(tuple_items_key);
 
-      return Ok(tokens);
+              quote! { #tuple_items_identifier }
+            })
+            .reduce(|a, b| quote! {#a, #b})
+            .unwrap_or_default();
+
+          tokens.append_all(quote! {
+            pub type #identifier = (
+              #inner_tokens
+            );
+          });
+        } else if let Some(array_items_key) = &item.array_items {
+          let array_items_identifier = specification.get_type_identifier(array_items_key);
+
+          tokens.append_all(quote! {
+            pub type #identifier = std::vec::Vec<#array_items_identifier>;
+          });
+        } else {
+          tokens.append_all(quote! {
+            pub type #identifier = std::vec::Vec<()>;
+          });
+        }
+      }
+      SchemaType::Object => {
+        if let Some(object_properties_entries) = &item.object_properties {
+          let required: HashSet<_> = item
+            .required
+            .as_ref()
+            .map(|value| value.iter().collect())
+            .unwrap_or_default();
+          let inner_tokens = object_properties_entries
+            .iter()
+            .map(|(member_name, object_properties_key)| {
+              let member_identifier =
+                format_ident!("r#{}", Sentence::new(member_name).to_snake_case());
+              let object_properties_identifier =
+                specification.get_type_identifier(object_properties_key);
+
+              if required.contains(member_name) {
+                quote! {
+                  pub #member_identifier: #object_properties_identifier
+                }
+              } else {
+                quote! {
+                  pub #member_identifier: std::option::Option<#object_properties_identifier>
+                }
+              }
+            })
+            .reduce(|a, b| quote! {#a, #b})
+            .unwrap_or_default();
+
+          tokens.append_all(quote! {
+            #[derive(core::fmt::Debug, serde::Serialize, serde::Deserialize, core::clone::Clone)]
+            pub struct #identifier {
+              #inner_tokens
+            }
+          });
+        } else if let Some(map_properties_key) = &item.map_properties {
+          let map_properties_identifier = specification.get_type_identifier(map_properties_key);
+
+          tokens.append_all(quote! {
+              pub type #identifier = std::collections::HashMap<std::string::String, #map_properties_identifier>;
+            });
+        } else {
+          tokens.append_all(quote! {
+            pub type #identifier = std::collections::HashMap<std::string::String, ()>;
+          });
+        }
+      }
+    };
+
+    let boxed = item
+      .types
+      .iter()
+      .flatten()
+      .any(|r#type| *r#type == SchemaType::Object)
+      || item.one_of.is_some();
+
+    if boxed {
+      tokens.append_all(quote! {
+        impl core::convert::From<#type_identifier> for #identifier {
+          fn from(value: #type_identifier) -> Self {
+              *value.0
+          }
+        }
+      });
+    } else {
+      tokens.append_all(quote! {
+        impl core::convert::From<#type_identifier> for #identifier {
+          fn from(value: #type_identifier) -> Self {
+              value.0
+          }
+        }
+      });
     }
+
+    return Ok(tokens);
   }
 
   if let Some(one_of) = &item.one_of {

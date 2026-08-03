@@ -3,16 +3,17 @@
   "version": "0.7.11",
   "sideEffects": false,
   "description": "core library",
-  "type": "commonjs",
-  "module": "./dist/jns42_core.js",
-  "types": "./dist/jns42_core.d.ts",
+  "type": "module",
+  "module": "./src/main.js",
+  "types": "./src/main.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/jns42_core.js",
-      "types": "./dist/jns42_core.d.ts"
+      "import": "./src/main.js",
+      "types": "./src/main.d.ts"
     }
   },
   "files": [
+    "./src/**",
     "./dist/**"
   ],
   "repository": {
@@ -34,9 +35,7 @@
     "core"
   ],
   "homepage": "https://www.JsonSchema42.org",
-  "devDependencies": {},
-  "dependencies": {},
   "engines": {
-    "node": ">=20"
+    "node": ">=26"
   }
 }

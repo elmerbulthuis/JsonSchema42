@@ -12,7 +12,7 @@ import {
 export function* generateMocksTsCode(specification: models.Specification) {
   const packageInfo = readPackageInfo();
 
-  yield core.banner("//", `v${packageInfo.version}`);
+  yield core.utilities.banner("//", `v${packageInfo.version}`);
 
   const { names, typeModels, isMockable } = specification;
 
@@ -121,12 +121,12 @@ export function* generateMocksTsCode(specification: models.Specification) {
     assert(item != null);
     assert(isMockable(itemKey));
 
-    if ("options" in item && item.options != null) {
+    if ("options" in item && item.options.length > 0) {
       yield itt`
           (
             [
               ${joinIterable(
-                (item.options as any[]).map((option) => JSON.stringify(option)),
+                item.options.map((option) => JSON.stringify(option)),
                 ", ",
               )}
             ] as const
@@ -277,7 +277,6 @@ export function* generateMocksTsCode(specification: models.Specification) {
               ${generateInterfaceContent()}
             ]
           `;
-
         return;
 
         function* generateInterfaceContent() {
@@ -325,7 +324,6 @@ export function* generateMocksTsCode(specification: models.Specification) {
               ${generateInterfaceContent()}
             }
           `;
-
         return;
 
         function* generateInterfaceContent() {
@@ -344,7 +342,8 @@ export function* generateMocksTsCode(specification: models.Specification) {
             propertiesCount = propertyNames.size;
 
             for (const name of propertyNames) {
-              if ((objectProperties as Record<string, number>)[name] == null) {
+              const objectPropertyKey = objectProperties[name];
+              if (objectPropertyKey == null) {
                 yield itt`
                     [${JSON.stringify(name)}]: anyValue,
                   `;
@@ -361,7 +360,7 @@ export function* generateMocksTsCode(specification: models.Specification) {
                   yield itt`
                       [${JSON.stringify(name)}]:
                         depthCounter < configuration.maximumDepth ?
-                        ${generateMockReference(objectProperties[name])} :
+                        ${generateMockReference(objectPropertyKey)} :
                         undefined,
                     `;
                 }

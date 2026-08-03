@@ -5,7 +5,7 @@ import { generateJsDocComments, itt, readPackageInfo } from "../utilities.js";
 export function* generateMocksTestTsCode(specification: models.Specification) {
   const packageInfo = readPackageInfo();
 
-  yield core.banner("//", `v${packageInfo.version}`);
+  yield core.utilities.banner("//", `v${packageInfo.version}`);
 
   const { names, typeModels, isMockable } = specification;
 
