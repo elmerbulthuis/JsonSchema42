@@ -1,8 +1,8 @@
-import fs from "node:fs";
+import fs from "node:fs/promises";
 import { instantiate } from "../dist/jns42_core.component.js";
 
 async function getCoreModule(path) {
-  const bytes = fs.readFileSync(new URL(`../dist/${path}`, import.meta.url));
+  const bytes = await fs.readFile(new URL(`../dist/${path}`, import.meta.url));
   const module = await WebAssembly.compile(bytes);
   return module;
 }
@@ -22,7 +22,7 @@ const instance = await instantiate(getCoreModule, {
       }
 
       try {
-        const text = fs.readFileSync(location, "utf-8");
+        const text = await fs.readFile(location, "utf-8");
         return text;
       } catch (error) {
         throw "io-error";
