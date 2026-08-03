@@ -29,7 +29,7 @@ pub struct CommandOptions {
   pub transform_maximum_iterations: usize,
 }
 
-pub fn run_command(options: CommandOptions) -> Result<(), Box<dyn Error>> {
+pub async fn run_command(options: CommandOptions) -> Result<(), Box<dyn Error>> {
   let CommandOptions {
     schema_location,
     default_meta_schema_id,
@@ -52,6 +52,7 @@ pub fn run_command(options: CommandOptions) -> Result<(), Box<dyn Error>> {
       None,
       &default_meta_schema_id,
     )
+    .await
     .unwrap();
 
   let specification = Specification::new(
