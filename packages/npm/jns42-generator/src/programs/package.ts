@@ -80,7 +80,7 @@ async function main(configuration: MainConfiguration) {
 
   const context = contextBuilder.build();
 
-  await context.loadFromLocation(
+  const entryLocation = await context.loadFromLocation(
     instanceSchemaLocation,
     instanceSchemaLocation,
     undefined,
@@ -96,6 +96,6 @@ async function main(configuration: MainConfiguration) {
     packageDirectoryPath,
     packageName,
     packageVersion,
-    entryLocation: instanceSchemaLocation,
+    entryLocation,
   });
 }
