@@ -1,6 +1,5 @@
 package jns42:core;
 
-
 interface imports {
   enum fetch-text-error {
     io-error,
