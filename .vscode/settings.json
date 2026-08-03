@@ -6,15 +6,13 @@
   },
   "editor.rulers": [100],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "typescript.tsdk": "./node_modules/typescript/lib",
-  "npm.packageManager": "npm",
-  "npm.scriptRunner": "npm",
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
   "rust-analyzer.check.command": "clippy",
+  // "rust-analyzer.cargo.target": "wasm32-unknown-unknown",
   "[rust]": {
     "editor.defaultFormatter": "rust-lang.rust-analyzer"
   },
   "[toml]": {
     "editor.defaultFormatter": "tamasfe.even-better-toml"
-  },
-  "rust-analyzer.cargo.target": "wasm32-unknown-unknown"
+  }
 }
